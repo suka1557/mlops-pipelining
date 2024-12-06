@@ -40,8 +40,11 @@ def load_data_in_mongo(uri, db, collection, news_json):
     client = MongoClient(uri)
     collection = client[db][collection]
     
+    # Drop the collection if it exists
+    if collection.count_documents({}) > 0:
+        collection.drop()  # Drop the collection if it exists
+
     # Insert data into the collection
-    collection.drop()  # Drop the collection if it exists
     collection.insert_many(news_json)
     print(f"Data inserted into {collection} in Mongo database.")
 
