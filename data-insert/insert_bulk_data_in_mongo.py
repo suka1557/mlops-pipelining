@@ -7,7 +7,8 @@ sys.path.append('./')
 
 from configs.main_config import (
     train_config_path, news_csv_file_path,
-    MONGO_URI, MONGO_DB_NAME, FAKE_NEWS_COLLECTION_NAME
+    MONGO_URI, MONGO_DB_NAME, FAKE_NEWS_COLLECTION_NAME,
+    FAKE_NEWS_COLLECTION_UPDATE_DATE
 )
 
 # get the cutoff date
@@ -51,6 +52,23 @@ def load_data_in_mongo(uri, db, collection, news_json):
     # Close the connection
     client.close()
 
+#update date in update collection in mongo
+def update_date_in_mongo(uri, db, collection, date):
+    #Create connection
+    client = MongoClient(uri)
+    collection = client[db][collection]
+    
+    # Drop the collection if it exists
+    if collection.count_documents({}) > 0:
+        collection.drop()  # Drop the collection if it exists
+
+    # Insert data into the collection
+    collection.insert_one({'last_added_date': date})
+    print(f"Data inserted into {collection} in Mongo database.")
+
+    # Close the connection
+    client.close()
+
 
 # create a function to call all the functions
 def main():
@@ -63,6 +81,13 @@ def main():
         db=MONGO_DB_NAME,
         collection=FAKE_NEWS_COLLECTION_NAME,
         news_json=news_json
+    )
+
+    update_date_in_mongo(
+        uri=MONGO_URI,
+        db=MONGO_DB_NAME,
+        collection=FAKE_NEWS_COLLECTION_UPDATE_DATE,
+        date=cutoff_date
     )
 
 if __name__ == "__main__":

@@ -20,3 +20,4 @@ MONGO_URI = f"mongodb://{MONGO_DB_HOST}:{MONGO_DB_PORT}"
 
 # MONGO COllection
 FAKE_NEWS_COLLECTION_NAME = 'fake-news'
+FAKE_NEWS_COLLECTION_UPDATE_DATE = 'fake-news-update-date'
