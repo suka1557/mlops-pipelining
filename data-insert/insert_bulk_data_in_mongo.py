@@ -2,6 +2,7 @@ from pymongo import MongoClient
 import pandas as pd
 import yaml
 import sys
+import time
 
 sys.path.append('./')
 
@@ -36,7 +37,7 @@ def filter_news(news_data, cutoff_date):
     return news_json   
 
 def load_data_in_mongo(uri, db, collection, news_json):
-
+    print(f"Connecting to Mongo database: {uri}")
     #Create connection
     client = MongoClient(uri)
     collection = client[db][collection]
@@ -54,6 +55,7 @@ def load_data_in_mongo(uri, db, collection, news_json):
 
 #update date in update collection in mongo
 def update_date_in_mongo(uri, db, collection, date):
+    print(f"Connecting to Mongo database: {uri}")
     #Create connection
     client = MongoClient(uri)
     collection = client[db][collection]
@@ -63,8 +65,8 @@ def update_date_in_mongo(uri, db, collection, date):
         collection.drop()  # Drop the collection if it exists
 
     # Insert data into the collection
-    collection.insert_one({'last_added_date': date})
-    print(f"Data inserted into {collection} in Mongo database.")
+    collection.insert_one({'last_added_date': date, 'updated_timestamp': int(time.time())})
+    print(f"Date updated into {collection} in Mongo database.")
 
     # Close the connection
     client.close()
