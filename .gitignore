@@ -12,6 +12,7 @@ __pycache__/
 #Folders
 mlops-env/
 data/
+test-codes/
 
 # Distribution / packaging
 .Python
