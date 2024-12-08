@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  mongo_db:
+    image: mongo:latest
+    container_name: mongo_container
+    networks:
+      - mongo_net
+
+  python_mongo_dump:
+    build:
+      context: .
+      dockerfile: Dockerfile-mongo-dump
+    container_name: python_mongo_dump_container
+    networks:
+      - mongo_net
+    depends_on:
+      - mongo_db
+    environment:
+      - ENV=container
+      - MONGO_SERVICE_NAME=mongo_db
+      - MONGO_PORT=27017
+
+  python_mongo_data_insert_api:
+    build:
+      context: .
+      dockerfile: Dockerfile-insert-data-api
+    container_name: python_mongo_data_insert_api_container
+    ports:
+      - "9001:9001"
+    networks:
+      - mongo_net
+    depends_on:
+      - mongo_db
+    environment:
+      - ENV=container
+      - MONGO_SERVICE_NAME=mongo_db
+      - MONGO_PORT=27017
+
+networks:
+  mongo_net:
+    driver: bridge

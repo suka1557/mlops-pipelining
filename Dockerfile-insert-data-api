@@ -13,4 +13,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app
 
 # Run the data insert api
-CMD ["gunicorn -w 2 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:9001 --timeout 120 api.insert_new_data:app"]
+CMD ["gunicorn", "-w", "2", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:9001", "--timeout", "120", "api.insert_new_data:app"]

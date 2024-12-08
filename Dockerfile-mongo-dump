@@ -13,4 +13,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app
 
 # Run the data insert script
-CMD ["python3", "data-insert/insert_bulk_data_in_mongo.py"]
+CMD ["python3", "data_insert/insert_bulk_data_in_mongo.py"]
